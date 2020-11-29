@@ -1,9 +1,9 @@
 # Describe VMs
 MACHINES = {
-  # VM name "Centos_Selantyev-7-5"
+  # VM name "zfs"
   :"CentosSelantyev-7-5" => {
               # VM box
-              :box_name => "Centos_Selantyev-7-5",
+              :box_name => "generic/centos8",
               # VM CPU count
               :cpus => 2,
               # VM RAM size (Mb)
