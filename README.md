@@ -274,3 +274,22 @@ otus/hometask2  keyformat             none                   default
 otus/hometask2  pbkdf2iters           0                      default
 otus/hometask2  special_small_blocks  0                      default
 ```
+
+**Найти сообщение от преподавателей**
+1. Скачать файл 
+https://drive.google.com/file/d/1gH8gCL9y7Nd5Ti3IRmplZPF1XjzxeRAG/view?usp=sharing созданый командой:
+
+`zfs send otus/storage@task2 > otus_task2.filе`
+или
+`zfs snapshot storage/data/music@snap001`
+
+2. Восстанавливаем снэпшот из файла
+
+`zfs receive -F otus/hometask2 < ./otus_task2.file`
+
+3. Найти сообщение
+
+```
+cat /otus/hometask2/task1/file_mess/secret_message
+https://github.com/sindresorhus/awesome
+```
