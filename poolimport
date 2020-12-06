@@ -1,0 +1,995 @@
+Script started on 2020-12-06 11:41:49+00:00
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# wget --no-check-certificate -O zfs.file 'https://drive.google.com/open?id=1KRB
+BNW33QWqbvbVHa3hLJivOAt60yukkg'
+--2020-12-06 11:44:32--  https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg
+Resolving drive.google.com (drive.google.com)... 173.194.222.139, 173.194.222.102, 173.194.222.101, ...
+Connecting to drive.google.com (drive.google.com)|173.194.222.139|:443... connected.
+HTTP request sent, awaiting response... 307 Temporary Redirect
+Location: https://drive.google.com/file/d/1KRBNW33QWqbvbVHa3hLJivOAt60yukkg/view?usp=drive_open [following]
+--2020-12-06 11:44:32--  https://drive.google.com/file/d/1KRBNW33QWqbvbVHa3hLJivOAt60yukkg/view?usp=drive_open
+Reusing existing connection to drive.google.com:443.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: ‘zfs.file’
+
+
+zfs.file                     [<=>                             ]       0  --.-KB/s               
+zfs.file                     [ <=>                            ]  61.29K   379KB/s    in 0.2s    
+
+2020-12-06 11:44:33 (379 KB/s) - ‘zfs.file’ saved [62766]
+
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# ll
+total 3364
+-rw-rw-r--. 1 vagrant vagrant 3291647 Dec  6 10:53 pg2600.txt
+-rw-r--r--. 1 root    root      11043 Dec  6 09:55 zfs
+-rw-r--r--. 1 root    root      62766 Dec  6 11:44 zfs.file
+-rw-r--r--. 1 root    root          0 Dec  6 11:41 zfs_homework2
+-rw-r--r--. 1 root    root      70239 Dec  6 11:09 zfs_homework.md
+-rw-r--r--. 1 root    root          0 Dec  6 09:56 zfs.md
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zfs status
+unrecognized command 'status'
+usage: zfs command args ...
+where 'command' is one of the following:
+
+	version
+
+	create [-p] [-o property=value] ... <filesystem>
+	create [-ps] [-b blocksize] [-o property=value] ... -V <size> <volume>
+	destroy [-fnpRrv] <filesystem|volume>
+	destroy [-dnpRrv] <filesystem|volume>@<snap>[%<snap>][,...]
+	destroy <filesystem|volume>#<bookmark>
+
+	snapshot [-r] [-o property=value] ... <filesystem|volume>@<snap> ...
+	rollback [-rRf] <snapshot>
+	clone [-p] [-o property=value] ... <snapshot> <filesystem|volume>
+	promote <clone-filesystem>
+	rename [-f] <filesystem|volume|snapshot> <filesystem|volume|snapshot>
+	rename [-f] -p <filesystem|volume> <filesystem|volume>
+	rename -r <snapshot> <snapshot>
+	bookmark <snapshot> <bookmark>
+	program [-jn] [-t <instruction limit>] [-m <memory limit (b)>]
+	    <pool> <program file> [lua args...]
+
+	list [-Hp] [-r|-d max] [-o property[,...]] [-s property]...
+	    [-S property]... [-t type[,...]] [filesystem|volume|snapshot] ...
+
+	set <property=value> ... <filesystem|volume|snapshot> ...
+	get [-rHp] [-d max] [-o "all" | field[,...]]
+	    [-t type[,...]] [-s source[,...]]
+	    <"all" | property[,...]> [filesystem|volume|snapshot|bookmark] ...
+	inherit [-rS] <property> <filesystem|volume|snapshot> ...
+	upgrade [-v]
+	upgrade [-r] [-V version] <-a | filesystem ...>
+
+	userspace [-Hinp] [-o field[,...]] [-s field] ...
+	    [-S field] ... [-t type[,...]] <filesystem|snapshot>
+	groupspace [-Hinp] [-o field[,...]] [-s field] ...
+	    [-S field] ... [-t type[,...]] <filesystem|snapshot>
+	projectspace [-Hp] [-o field[,...]] [-s field] ... 
+	    [-S field] ... <filesystem|snapshot>
+
+	project [-d|-r] <directory|file ...>
+	project -c [-0] [-d|-r] [-p id] <directory|file ...>
+	project -C [-k] [-r] <directory ...>
+	project [-p id] [-r] [-s] <directory ...>
+
+	mount
+	mount [-lvO] [-o opts] <-a | filesystem>
+	unmount [-f] <-a | filesystem|mountpoint>
+	share [-l] <-a [nfs|smb] | filesystem>
+	unshare <-a [nfs|smb] | filesystem|mountpoint>
+
+	send [-DnPpRvLecwhb] [-[i|I] snapshot] <snapshot>
+	send [-nvPLecw] [-i snapshot|bookmark] <filesystem|volume|snapshot>
+	send [-nvPe] -t <receive_resume_token>
+	receive [-vnsFhu] [-o <property>=<value>] ... [-x <property>] ...
+	    <filesystem|volume|snapshot>
+	receive [-vnsFhu] [-o <property>=<value>] ... [-x <property>] ... 
+	    [-d | -e] <filesystem>
+	receive -A <filesystem|volume>
+
+	allow <filesystem|volume>
+	allow [-ldug] <"everyone"|user|group>[,...] <perm|@setname>[,...]
+	    <filesystem|volume>
+	allow [-ld] -e <perm|@setname>[,...] <filesystem|volume>
+	allow -c <perm|@setname>[,...] <filesystem|volume>
+	allow -s @setname <perm|@setname>[,...] <filesystem|volume>
+
+	unallow [-rldug] <"everyone"|user|group>[,...]
+	    [<perm|@setname>[,...]] <filesystem|volume>
+	unallow [-rld] -e [<perm|@setname>[,...]] <filesystem|volume>
+	unallow [-r] -c [<perm|@setname>[,...]] <filesystem|volume>
+	unallow [-r] -s @setname [<perm|@setname>[,...]] <filesystem|volume>
+
+	hold [-r] <tag> <snapshot> ...
+	holds [-rH] <snapshot> ...
+	release [-r] <tag> <snapshot> ...
+	diff [-FHt] <snapshot> [snapshot|filesystem]
+
+	load-key [-rn] [-L <keylocation>] <-a | filesystem|volume>
+	unload-key [-r] <-a | filesystem|volume>
+	change-key [-l] [-o keyformat=<value>]
+	    [-o keylocation=<value>] [-o pbkfd2iters=<value>]
+	    <filesystem|volume>
+	change-key -i [-l] <filesystem|volume>
+
+Each dataset is of the form: pool/[dataset/]*dataset[@name]
+
+For the property list, run: zfs set|get
+
+For the delegated permission list, run: zfs allow|unallow
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zfs status[K[K[K[K[K[Klist
+NAME                              USED  AVAIL     REFER  MOUNTPOINT
+poolmirror                       10.2M  3.61G       27K  /poolmirror
+poolmirror/data                  10.0M  3.61G     25.5K  /poolmirror/data
+poolmirror/data/doc              10.0M  3.61G     30.5K  /poolmirror/data/doc
+poolmirror/data/doc/compressed1  1.22M  3.61G     1.22M  /poolmirror/data/doc/compressed1
+poolmirror/data/doc/compressed2  1.22M  3.61G     1.22M  /poolmirror/data/doc/compressed2
+poolmirror/data/doc/compressed3  2.00M  3.61G     2.00M  /poolmirror/data/doc/compressed3
+poolmirror/data/doc/compressed4  2.38M  3.61G     2.38M  /poolmirror/data/doc/compressed4
+poolmirror/data/doc/compressed5  3.17M  3.61G     3.17M  /poolmirror/data/doc/compressed5
+poolmirror/mydir                   24K  3.61G       24K  /poolmirror/mydir
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool export storaf[Kge
+cannot open 'storage': no such pool
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool export storage[K[K[K[K[K[K[Kpoolmirror
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool status
+no pools available
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool import -d zfs.file
+no pools available to import
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool import -d zfs.file stoga[K[Krage
+cannot import 'storage': no such pool available
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool import -d zfs.file storage[1@~[1@/
+cannot import 'storage': no such pool available
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool import -d ~/zfs.file storage[K[K[K[K[K[K[K[H[2J[root@zfs vagrant]# zpool import -d ~/zfs.file [K
+no pools available to import
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool import -d ~/zfs.file
+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kzpool import -d ~/zfs.file storage[2P[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K[12Pstatus
+no pools available
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool statusimport -d ~/zfs.file
+no pools available to import
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool import -d ~/zfs.file storage
+cannot import 'storage': no such pool available
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# lsblk
+NAME                MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda                   8:0    0  128G  0 disk 
+├─sda1                8:1    0    1G  0 part /boot
+└─sda2                8:2    0  127G  0 part 
+  ├─cl_centos8-root 253:0    0   50G  0 lvm  /
+  ├─cl_centos8-swap 253:1    0  2.1G  0 lvm  [SWAP]
+  └─cl_centos8-home 253:2    0   75G  0 lvm  /home
+sdb                   8:16   0    4G  0 disk 
+├─sdb1                8:17   0    4G  0 part 
+└─sdb9                8:25   0    8M  0 part 
+sdc                   8:32   0    4G  0 disk 
+├─sdc1                8:33   0    4G  0 part 
+└─sdc9                8:41   0    8M  0 part 
+sdd                   8:48   0    2G  0 disk 
+sde                   8:64   0    1G  0 disk 
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# df -hT
+Filesystem                  Type      Size  Used Avail Use% Mounted on
+devtmpfs                    devtmpfs  1.4G     0  1.4G   0% /dev
+tmpfs                       tmpfs     1.4G     0  1.4G   0% /dev/shm
+tmpfs                       tmpfs     1.4G  8.5M  1.4G   1% /run
+tmpfs                       tmpfs     1.4G     0  1.4G   0% /sys/fs/cgroup
+/dev/mapper/cl_centos8-root xfs        50G  2.1G   48G   5% /
+/dev/mapper/cl_centos8-home xfs        75G  571M   75G   1% /home
+/dev/sda1                   ext4      976M  140M  770M  16% /boot
+tmpfs                       tmpfs     284M     0  284M   0% /run/user/1000
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# df -hT[1Plsblkzpool import -d ~/zfs.file storage
+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kwget --no-check-certificate -O zfs.file 'https://drive.google.com/open?id=1KRB
+BNW33QWqbvbVHa3hLJivOAt60yukkg'
+--2020-12-06 11:54:02--  https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg
+Resolving drive.google.com (drive.google.com)... 173.194.222.138, 173.194.222.113, 173.194.222.100, ...
+Connecting to drive.google.com (drive.google.com)|173.194.222.138|:443... connected.
+HTTP request sent, awaiting response... 307 Temporary Redirect
+Location: https://drive.google.com/file/d/1KRBNW33QWqbvbVHa3hLJivOAt60yukkg/view?usp=drive_open [following]
+--2020-12-06 11:54:03--  https://drive.google.com/file/d/1KRBNW33QWqbvbVHa3hLJivOAt60yukkg/view?usp=drive_open
+Reusing existing connection to drive.google.com:443.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: ‘zfs.file’
+
+
+zfs.file                     [<=>                             ]       0  --.-KB/s               
+zfs.file                     [ <=>                            ]  69.19K   353KB/s    in 0.2s    
+
+2020-12-06 11:54:04 (353 KB/s) - ‘zfs.file’ saved [70851]
+
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool import -d ${PWD}/zpoolexport/
+no pools available to import
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool import -d ${PWD}/zpoolexport/ storage
+cannot import 'storage': no such pool available
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool import -d ${PWD}/zpoolexport/ storage
+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kzpool import -d ${PWD}/zpoolexport/ storage[1Ptorage[1Porage[1Prage[1Page[1Pge[1Pe[Kzfs.file 
+cannot import 'zfs.file': no such pool available
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool import -d ${PWD}/zpoolexport/ zfs.file [C[C[C[C[C[1@~[1@/
+cannot import '/root/zfs.file': no such pool available
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# [H[2J[root@zfs vagrant]# ll
+total 3380
+-rw-rw-r--. 1 vagrant vagrant 3291647 Dec  6 10:53 pg2600.txt
+-rw-r--r--. 1 root    root      11043 Dec  6 09:55 zfs
+-rw-r--r--. 1 root    root      70851 Dec  6 11:54 zfs.file
+-rw-r--r--. 1 root    root       8192 Dec  6 11:51 zfs_homework2
+-rw-r--r--. 1 root    root      70239 Dec  6 11:09 zfs_homework.md
+-rw-r--r--. 1 root    root          0 Dec  6 09:56 zfs.md
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# llzpool import -d ${PWD}/zpoolexport/ ~/zfs.file [2P[C[C[C[C[C[C[C[C[C[2Pstorage[K
+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cwget --no-check-certificate -O zfs.file 'https://drive.google.com/open?id=1KRB
+BNW33QWqbvbVHa3hLJivOAt60yukkg'[Adf -hT[K
+
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cwget --no-check-certificate -O zfs.file 'https://drive.google.com/open?id=1KRB
+BNW33QWqbvbVHa3hLJivOAt60yukkg'
+[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C 'https://drive.google.com/open?id=1KRBN[1PW33QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C 'https://drive.google.com/open?id=1KRBNW[1P33QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C 'https://drive.google.com/open?id=1KRBNW3[C[1PQWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C 'https://drive.google.com/open?id=1KRBNW33[1PQWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C 'https://drive.google.com/open?id=1KRBNW33Q[1PWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C 'https://drive.google.com/open?id=1KRBNW33QW[1PqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C 'https://drive.google.com/open?id=1KRBNW33QWq[1PbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C 'https://drive.google.com/open?id=1KRBNW33QWqb[1PvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ct 'https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ca 'https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cr 'https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C. 'https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cg 'https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cz 'https://drive.google.com/open?id=1KRBNW[C3QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Czfs_task1tar.gz 'https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C.tar.gz 'https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+
+
+--2020-12-06 11:56:05--  https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg
+Resolving drive.google.com (drive.google.com)... 173.194.222.138, 173.194.222.113, 173.194.222.100, ...
+Connecting to drive.google.com (drive.google.com)|173.194.222.138|:443... connected.
+HTTP request sent, awaiting response... 307 Temporary Redirect
+Location: https://drive.google.com/file/d/1KRBNW33QWqbvbVHa3hLJivOAt60yukkg/view?usp=drive_open [following]
+--2020-12-06 11:56:06--  https://drive.google.com/file/d/1KRBNW33QWqbvbVHa3hLJivOAt60yukkg/view?usp=drive_open
+Reusing existing connection to drive.google.com:443.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: ‘zfs_task1.tar.gz’
+
+
+zfs_task1.tar.gz             [<=>                             ]       0  --.-KB/s               
+zfs_task1.tar.gz             [ <=>                            ]  69.19K   397KB/s    in 0.2s    
+
+2020-12-06 11:56:06 (397 KB/s) - ‘zfs_task1.tar.gz’ saved [70851]
+
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar zv[K[Kxz[K[Kzxvf zfs_task1.tar.gz 
+
+gzip: stdin: not in gzip format
+tar: Child returned status 1
+tar: Error is not recoverable: exiting now
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar zxvf zfs_task1.tar.gz [1P[1P[1@x[1@z
+
+gzip: stdin: not in gzip format
+tar: Child returned status 1
+tar: Error is not recoverable: exiting now
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar xzvf zfs_task1.tar.gz [1P
+
+gzip: stdin: not in gzip format
+tar: Child returned status 1
+tar: Error is not recoverable: exiting now
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar xvf zfs_task1.tar.gz [1P[1@x
+tar: xfs_task1.tar.gz: Cannot open: No such file or directory
+tar: Error is not recoverable: exiting now
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar xvf xfs_task1.tar.gz [1P[1P[1P[1@z[1@v[1@f
+tar: You must specify one of the '-Acdtrux', '--delete' or '--test-label' options
+Try 'tar --help' or 'tar --usage' for more information.
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar zvf xfs_task1.tar.gz [C[C[C
+tar: You must specify one of the '-Acdtrux', '--delete' or '--test-label' options
+Try 'tar --help' or 'tar --usage' for more information.
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar zvf xfs_task1.tar.gz [H[2J[root@zfs vagrant]# tar zvf xfs_task1.tar.gz [K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K -xvf zfs_task1.tar.gz 
+
+gzip: stdin: not in gzip format
+tar: Child returned status 1
+tar: Error is not recoverable: exiting now
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar -xvf zfs_task1.tar.gz [1P[1@z
+tar: You must specify one of the '-Acdtrux', '--delete' or '--test-label' options
+Try 'tar --help' or 'tar --usage' for more information.
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar -zvf zfs_task1.tar.gz [1P[1P[1P[1@ч[1@м[1@а[1P[1P[1P[1@x[1@v[1@f
+
+gzip: stdin: not in gzip format
+tar: Child returned status 1
+tar: Error is not recoverable: exiting now
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar -xvf zfs_task1.tar.gz [1P
+tar: You must specify one of the '-Acdtrux', '--delete' or '--test-label' options
+Try 'tar --help' or 'tar --usage' for more information.
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar -vf zfs_task1.tar.gz [1@x[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C/hova[K[K[Kome[K[K[K[K[K[K
+
+gzip: stdin: not in gzip format
+tar: Child returned status 1
+tar: Error is not recoverable: exiting now
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar -xvf zfs_task1.tar.gz
+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Kll
+total 3460
+-rw-rw-r--. 1 vagrant vagrant 3291647 Dec  6 10:53 pg2600.txt
+-rw-r--r--. 1 root    root      11043 Dec  6 09:55 zfs
+-rw-r--r--. 1 root    root      70851 Dec  6 11:54 zfs.file
+-rw-r--r--. 1 root    root      16384 Dec  6 11:56 zfs_homework2
+-rw-r--r--. 1 root    root      70239 Dec  6 11:09 zfs_homework.md
+-rw-r--r--. 1 root    root          0 Dec  6 09:56 zfs.md
+-rw-r--r--. 1 root    root      70851 Dec  6 11:56 [0m[01;31mzfs_task1.tar.gz[0m
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# lltar -xvf zfs_task1.tar.gz
+
+gzip: stdin: not in gzip format
+tar: Child returned status 1
+tar: Error is not recoverable: exiting now
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# yum install gzi[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Ktum [K[K[K[Kyum sera[K[Karch zip
+Last metadata expiration check: 2:37:23 ago on Sun 06 Dec 2020 09:23:08 AM UTC.
+================================== Name & Summary Matched: zip ==================================
+[1mzip(B[m.x86_64 : A file compression and packaging utility compatible with PK[1mZIP(B[m
+un[1mzip(B[m.x86_64 : A utility for unpacking [1mzip(B[m files
+pb[1mzip(B[m2.x86_64 : Parallel implementation of b[1mzip(B[m2
+lib[1mzip(B[m-devel.x86_64 : Development files for lib[1mzip(B[m
+lb[1mzip(B[m2.x86_64 : Fast, multi-threaded b[1mzip(B[m2 utility
+p7[1mzip(B[m-plugins.x86_64 : Additional plugins for p7[1mzip(B[m
+lib[1mzip(B[m-tools.x86_64 : Command line tools from lib[1mzip(B[m
+mini[1mzip(B[m-devel.x86_64 : Development files for mini[1mzip(B[m
+las[1mzip(B[m-devel.x86_64 : The development files for las[1mzip(B[m
+php-pecl-[1mzip(B[m.x86_64 : A [1mZIP(B[m archive management extension
+z[1mzip(B[mlib-utils.x86_64 : Utilities for the z[1mzip(B[mlib library
+b[1mzip(B[m2-libs.x86_64 : Libraries for applications using b[1mzip(B[m2
+b[1mzip(B[m2-libs.i686 : Libraries for applications using b[1mzip(B[m2
+python3-[1mzip(B[mstream.noarch : [1mZIP(B[m archive generator for Python
+nbdkit-plugin-g[1mzip(B[m.x86_64 : G[1mZip(B[m file serving plugin for nbdkit
+mini[1mzip(B[m1.2.x86_64 : Library for manipulation with .[1mzip(B[m archives
+perl-Archive-[1mZip(B[m.noarch : Perl library for accessing [1mZip(B[m archives
+perl-Compress-B[1mzip(B[m2.x86_64 : Interface to B[1mzip(B[m2 compression library
+mini[1mzip(B[m1.2-devel.x86_64 : Development files for the mini[1mzip(B[m library
+z[1mzip(B[mlib.i686 : Lightweight library to easily extract data from [1mzip(B[m files
+z[1mzip(B[mlib.x86_64 : Lightweight library to easily extract data from [1mzip(B[m files
+lib[1mzip(B[m.x86_64 : C library for reading, creating, and modifying [1mzip(B[m archives
+b[1mzip(B[m2-devel.i686 : Libraries and header files for apps which will use b[1mzip(B[m2
+b[1mzip(B[m2-devel.x86_64 : Libraries and header files for apps which will use b[1mzip(B[m2
+perl-Compress-Raw-B[1mzip(B[m2.x86_64 : Low-level interface to b[1mzip(B[m2 compression library
+fuse-[1mzip(B[m.x86_64 : Filesystem to navigate, extract, create and modify [1mZIP(B[m archives
+perl-PerlIO-g[1mzip(B[m.x86_64 : Perl extension to provide a PerlIO layer to g[1mzip(B[m/gun[1mzip(B[m
+python3-[1mzip(B[mp.noarch : Backport of pathlib-compatible object wrapper for [1mzip(B[m files
+mini[1mzip(B[m.x86_64 : Mini[1mzip(B[m contrib in zlib with the latest bug fixes and advanced features
+======================================= Name Matched: zip =======================================
+g[1mzip(B[m.x86_64 : The GNU data compression program
+l[1mzip(B[m.x86_64 : LZMA compressor with integrity checking
+b[1mzip(B[m2.x86_64 : A file compression utility
+p7[1mzip(B[m.x86_64 : Very high compression ratio file archiver
+las[1mzip(B[m.x86_64 : Quickly turns bulky LAS files into compant LAZ files
+p7[1mzip(B[m-doc.noarch : Manual documentation and contrib directory
+java-11-openjdk-javadoc-[1mzip(B[m.x86_64 : OpenJDK 11 API documentation compressed in single archive
+java-1.8.0-openjdk-javadoc-[1mzip(B[m.noarch : OpenJDK 8 API documentation compressed in single archive
+java-latest-openjdk-javadoc-[1mzip(B[m.x86_64 : OpenJDK 15 API documentation compressed in a single
+                                       : archive
+===================================== Summary Matched: zip ======================================
+libslz.x86_64 : StateLess [1mZip(B[m
+pigz.x86_64 : Parallel implementation of g[1mzip(B[m
+advancecomp.x86_64 : Recompression utilities for png, mng, [1mzip(B[m and gz files
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# yum search ziptar -xvf zfs_task1.tar.gz
+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cll[Ktar -xvf zfs_task1.tar.gz
+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cll[Ktar -xvf zfs_task1.tar.gz
+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[11Pyum search zip[K[Kinstall bzip
+Last metadata expiration check: 2:37:33 ago on Sun 06 Dec 2020 09:23:08 AM UTC.
+No match for argument: [1mbzip(B[m
+Error: Unable to find a match: bzip
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# yum install bzip2
+Last metadata expiration check: 2:37:36 ago on Sun 06 Dec 2020 09:23:08 AM UTC.
+Package bzip2-1.0.6-26.el8.x86_64 is already installed.
+Dependencies resolved.
+Nothing to do.
+Complete!
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# yum install bzip2[K[K[K[K[Kunzip
+Last metadata expiration check: 2:37:53 ago on Sun 06 Dec 2020 09:23:08 AM UTC.
+Dependencies resolved.
+=================================================================================================
+ Package             Architecture         Version                     Repository            Size
+=================================================================================================
+Installing:
+ unzip               x86_64               6.0-43.el8                  BaseOS               195 k
+
+Transaction Summary
+=================================================================================================
+Install  1 Package
+
+Total download size: 195 k
+Installed size: 413 k
+Is this ok [y/N]: y
+Downloading Packages:
+                                  [===                         ] ---  B/s |   0  B     --:-- ETA
+                                  [===                         ] ---  B/s |   0  B     --:-- ETA
+                                  [   ===                      ] ---  B/s |   0  B     --:-- ETA
+                               0% [                            ] ---  B/s |   0  B     --:-- ETA
+unzip-6.0-43.el8.x86_64.rpm    0% [                            ] ---  B/s |   0  B     --:-- ETA
+unzip-6.0-43.el8.x86_64.rpm                                      969 kB/s | 195 kB     00:00    
+-------------------------------------------------------------------------------------------------
+Total                                                             97 kB/s | 195 kB     00:02     
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+
+  Preparing        :                                                                         1/1 
+
+  Installing       : unzip-6.0-43.el8.x86_64 [                                             ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [===                                          ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [=======                                      ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [==========                                   ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [=============                                ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [==============                               ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [===============                              ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [=================                            ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [==================                           ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [===================                          ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [=====================                        ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [======================                       ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [==========================                   ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [=============================                ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [=================================            ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [====================================         ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [========================================     ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [===========================================  ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64 [============================================ ] 1/1
+  Installing       : unzip-6.0-43.el8.x86_64                                                 1/1 
+
+  Running scriptlet: unzip-6.0-43.el8.x86_64                                                 1/1 
+
+  Verifying        : unzip-6.0-43.el8.x86_64                                                 1/1 
+
+Installed:
+  unzip-6.0-43.el8.x86_64                                                                        
+
+Complete!
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# yum install unzipbzip2[K[2Psearch ziptar -xvf zfs_task1.tar.gz
+
+gzip: stdin: not in gzip format
+tar: Child returned status 1
+tar: Error is not recoverable: exiting now
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar -xvf zfs_task1.tar.gz[C
+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[8Pyum install unzip[K[K[K[K[Kgzip
+Last metadata expiration check: 2:38:11 ago on Sun 06 Dec 2020 09:23:08 AM UTC.
+Package gzip-1.9-9.el8.x86_64 is already installed.
+Dependencies resolved.
+Nothing to do.
+Complete!
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# yum install gziptar -xvf zfs_task1.tar.gz
+
+gzip: stdin: not in gzip format
+tar: Child returned status 1
+tar: Error is not recoverable: exiting now
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# [H[2J[root@zfs vagrant]# tar -xvf zfs_task1.tar.gz
+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[9Pyum install gziptar -xvf zfs_task1.tar.gz[1P[1P[1P[1P zfs_task1.tar.gz
+tar: Old option 'f' requires an argument.
+Try 'tar --help' or 'tar --usage' for more information.
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar  zfs_task1.tar.gz[1Pzfs_task1.tar.gz
+tar: Old option 'f' requires an argument.
+Try 'tar --help' or 'tar --usage' for more information.
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar zfs_task1.tar.gz[C zfs_task1.tar.gz- zfs_task1.tar.gzf zfs_task1.tar.gz
+tar: You must specify one of the '-Acdtrux', '--delete' or '--test-label' options
+Try 'tar --help' or 'tar --usage' for more information.
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar -f zfs_task1.tar.gzx zfs_task1.tar.gz
+tar: You must specify one of the '-Acdtrux', '--delete' or '--test-label' options
+Try 'tar --help' or 'tar --usage' for more information.
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar -fx zfs_task1.tar.gzv zfs_task1.tar.gz\ zfs_task1.tar.gz
+tar: You must specify one of the '-Acdtrux', '--delete' or '--test-label' options
+Try 'tar --help' or 'tar --usage' for more information.
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar -fxv\ zfs_task1.tar.gz[1P zfs_task1.tar.gz
+tar: You must specify one of the '-Acdtrux', '--delete' or '--test-label' options
+Try 'tar --help' or 'tar --usage' for more information.
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar -fxv zfs_task1.tar.gz[1P[1P[1P zfs_task1.tar.gzv zfs_task1.tar.gz
+tar: You must specify one of the '-Acdtrux', '--delete' or '--test-label' options
+Try 'tar --help' or 'tar --usage' for more information.
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar -v zfs_task1.tar.gz[1P zfs_task1.tar.gzx zfs_task1.tar.gz
+tar: Refusing to read archive contents from terminal (missing -f option?)
+tar: Error is not recoverable: exiting now
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar -x zfs_task1.tar.gzf zfs_task1.tar.gz
+
+gzip: stdin: not in gzip format
+tar: Child returned status 1
+tar: Error is not recoverable: exiting now
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# uzi[K[Kn
+unalias             unicode_stop        unlink              unversioned-python
+uname               uniq                unpigz              unxz
+uname26             unix2dos            unset               unzip
+unbound-anchor      unix2mac            unshare             unzipsfx
+unexpand            unix_chkpwd         unsquashfs          
+unicode_start       unix_update         until               
+[root@zfs vagrant]# un
+unalias             unicode_stop        unlink              unversioned-python
+uname               uniq                unpigz              unxz
+uname26             unix2dos            unset               unzip
+unbound-anchor      unix2mac            unshare             unzipsfx
+unexpand            unix_chkpwd         unsquashfs          
+unicode_start       unix_update         until               
+[root@zfs vagrant]# unzip zfs_task1.tar.gz
+Archive:  zfs_task1.tar.gz
+  End-of-central-directory signature not found.  Either this file is not
+  a zipfile, or it constitutes one disk of a multi-part archive.  In the
+  latter case the central directory and zipfile comment will be found on
+  the last disk(s) of this archive.
+unzip:  cannot find zipfile directory in one of zfs_task1.tar.gz or
+        zfs_task1.tar.gz.zip, and cannot find zfs_task1.tar.gz.ZIP, period.
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# unzip zfs_task1.tar.gz[1P[1P[1P[1P[1P zfs_task1.tar.gzb zfs_task1.tar.gzz zfs_task1.tar.gzi zfs_task1.tar.gzp zfs_task1.tar.gz
+bash: bzip: command not found
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# bzip zfs_task1.tar.gz[C[C2 zfs_task1.tar.gz
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# ll
+total 3428
+-rw-rw-r--. 1 vagrant vagrant 3291647 Dec  6 10:53 pg2600.txt
+-rw-r--r--. 1 root    root      11043 Dec  6 09:55 zfs
+-rw-r--r--. 1 root    root      70851 Dec  6 11:54 zfs.file
+-rw-r--r--. 1 root    root      32768 Dec  6 12:02 zfs_homework2
+-rw-r--r--. 1 root    root      70239 Dec  6 11:09 zfs_homework.md
+-rw-r--r--. 1 root    root          0 Dec  6 09:56 zfs.md
+-rw-r--r--. 1 root    root      21771 Dec  6 11:56 [0m[01;31mzfs_task1.tar.gz.bz2[0m
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# [H[2J[root@zfs vagrant]# wget --no-check-certificate -O zfs.file 'https://drive.google.com/open?id=1KRB
+BNW33QWqbvbVHa3hLJivOAt60yukkg'
+[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cile 'https://drive.google.com/open?id=1KRBN[1PW33QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cle 'https://drive.google.com/open?id=1KRBNW[1P33QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ce 'https://drive.google.com/open?id=1KRBNW3[C[1PQWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C 'https://drive.google.com/open?id=1KRBNW33[1PQWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ct 'https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Ca 'https://drive.google.com/open?id=1KRBNW[C3QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cr 'https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg'[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+
+
+--2020-12-06 12:04:04--  https://drive.google.com/open?id=1KRBNW33QWqbvbVHa3hLJivOAt60yukkg
+Resolving drive.google.com (drive.google.com)... 173.194.222.138, 173.194.222.101, 173.194.222.113, ...
+Connecting to drive.google.com (drive.google.com)|173.194.222.138|:443... connected.
+HTTP request sent, awaiting response... 307 Temporary Redirect
+Location: https://drive.google.com/file/d/1KRBNW33QWqbvbVHa3hLJivOAt60yukkg/view?usp=drive_open [following]
+--2020-12-06 12:04:05--  https://drive.google.com/file/d/1KRBNW33QWqbvbVHa3hLJivOAt60yukkg/view?usp=drive_open
+Reusing existing connection to drive.google.com:443.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: ‘zfs.tar’
+
+
+zfs.tar                      [<=>                             ]       0  --.-KB/s               
+zfs.tar                      [ <=>                            ]  69.19K   369KB/s    in 0.2s    
+
+2020-12-06 12:04:06 (369 KB/s) - ‘zfs.tar’ saved [70851]
+
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar -xvf 
+.ssh/    zfs.tar  
+[root@zfs vagrant]# tar -xvf zfs.tar 
+tar: This does not look like a tar archive
+tar: Skipping to next header
+tar: Exiting with failure status due to previous errors
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# tar -xvf zfs.tar [K[K[K[K[K_task1.tar.gz 
+zpoolexport/
+zpoolexport/filea
+zpoolexport/fileb
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# ll
+total 10612
+-rw-rw-r--. 1 vagrant vagrant 3291647 Dec  6 10:53 pg2600.txt
+-rw-r--r--. 1 root    root      11043 Dec  6 09:55 zfs
+-rw-r--r--. 1 root    root      70851 Dec  6 11:54 zfs.file
+-rw-r--r--. 1 root    root      36864 Dec  6 12:04 zfs_homework2
+-rw-r--r--. 1 root    root      70239 Dec  6 11:09 zfs_homework.md
+-rw-r--r--. 1 root    root          0 Dec  6 09:56 zfs.md
+-rw-r--r--. 1 root    root      70851 Dec  6 12:04 [0m[01;31mzfs.tar[0m
+-rw-rw-r--. 1 vagrant vagrant 7275140 Dec  6 12:04 [01;31mzfs_task1.tar.gz[0m
+-rw-r--r--. 1 root    root      21771 Dec  6 11:56 [01;31mzfs_task1.tar.gz.bz2[0m
+drwxr-xr-x. 2 root    root         32 May 15  2020 [01;34mzpoolexport[0m
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool import -s[Kd /zpo[K[Kpool./zpool[C[C[C[C[C[Cexport/
+   pool: otus
+     id: 6554193320433390805
+  state: ONLINE
+ action: The pool can be imported using its name or numeric identifier.
+ config:
+
+	otus                                 ONLINE
+	  mirror-0                           ONLINE
+	    /home/vagrant/zpoolexport/filea  ONLINE
+	    /home/vagrant/zpoolexport/fileb  ONLINE
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool import -d ./zpoolexport/ storage
+cannot import 'storage': no such pool available
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool status
+no pools available
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool statusimport -d ./zpoolexport/ storage[K[K[K[K[K[K[Kotus
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool import -d ./zpoolexport/ otus
+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cstatus[K
+  pool: otus
+ state: ONLINE
+  scan: none requested
+config:
+
+	NAME                                 STATE     READ WRITE CKSUM
+	otus                                 ONLINE       0     0     0
+	  mirror-0                           ONLINE       0     0     0
+	    /home/vagrant/zpoolexport/filea  ONLINE       0     0     0
+	    /home/vagrant/zpoolexport/fileb  ONLINE       0     0     0
+
+errors: No known data errors
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zfs list
+NAME             USED  AVAIL     REFER  MOUNTPOINT
+otus            2.04M   350M       24K  /otus
+otus/hometask2  1.88M   350M     1.88M  /otus/hometask2
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool status[K[K[K[K[K[K[K[K[K[K[K[Kzpool -h
+unrecognized command '-h'
+usage: zpool command args ...
+where 'command' is one of the following:
+
+	version
+
+	create [-fnd] [-o property=value] ... 
+	    [-O file-system-property=value] ... 
+	    [-m mountpoint] [-R root] <pool> <vdev> ...
+	destroy [-f] <pool>
+
+	add [-fgLnP] [-o property=value] <pool> <vdev> ...
+	remove [-nps] <pool> <device> ...
+
+	labelclear [-f] <vdev>
+
+	checkpoint [--discard] <pool> ...
+
+	list [-gHLpPv] [-o property[,...]] [-T d|u] [pool] ... 
+	    [interval [count]]
+	iostat [[[-c [script1,script2,...][-lq]]|[-rw]] [-T d | u] [-ghHLpPvy]
+	    [[pool ...]|[pool vdev ...]|[vdev ...]] [[-n] interval [count]]
+	status [-c [script1,script2,...]] [-igLpPstvxD]  [-T d|u] [pool] ... 
+	    [interval [count]]
+
+	online [-e] <pool> <device> ...
+	offline [-f] [-t] <pool> <device> ...
+	clear [-nF] <pool> [device]
+	reopen [-n] <pool>
+
+	attach [-f] [-o property=value] <pool> <device> <new-device>
+	detach <pool> <device>
+	replace [-f] [-o property=value] <pool> <device> [new-device]
+	split [-gLnPl] [-R altroot] [-o mntopts]
+	    [-o property=value] <pool> <newpool> [<device> ...]
+
+	initialize [-c | -s] <pool> [<device> ...]
+	resilver <pool> ...
+	scrub [-s | -p] <pool> ...
+	trim [-d] [-r <rate>] [-c | -s] <pool> [<device> ...]
+
+	import [-d dir] [-D]
+	import [-o mntopts] [-o property=value] ... 
+	    [-d dir | -c cachefile] [-D] [-l] [-f] [-m] [-N] [-R root] [-F [-n]] -a
+	import [-o mntopts] [-o property=value] ... 
+	    [-d dir | -c cachefile] [-D] [-l] [-f] [-m] [-N] [-R root] [-F [-n]]
+	    [--rewind-to-checkpoint] <pool | id> [newpool]
+	export [-af] <pool> ...
+	upgrade
+	upgrade -v
+	upgrade [-V version] <-a | pool ...>
+	reguid <pool>
+
+	history [-il] [<pool>] ...
+	events [-vHf [pool] | -c]
+
+	get [-Hp] [-o "all" | field[,...]] <"all" | property[,...]> <pool> ...
+	set <property=value> <pool> 
+	sync [pool] ...
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool -h[K[Kstatus
+  pool: otus
+ state: ONLINE
+  scan: none requested
+config:
+
+	NAME                                 STATE     READ WRITE CKSUM
+	otus                                 ONLINE       0     0     0
+	  mirror-0                           ONLINE       0     0     0
+	    /home/vagrant/zpoolexport/filea  ONLINE       0     0     0
+	    /home/vagrant/zpoolexport/fileb  ONLINE       0     0     0
+
+errors: No known data errors
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zpool status[K[K[K[K[K[Klist
+NAME   SIZE  ALLOC   FREE  CKPOINT  EXPANDSZ   FRAG    CAP  DEDUP    HEALTH  ALTROOT
+otus   480M  2.09M   478M        -         -     0%     0%  1.00x    ONLINE  -
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# 
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# 
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zfs -h
+unrecognized command '-h'
+usage: zfs command args ...
+where 'command' is one of the following:
+
+	version
+
+	create [-p] [-o property=value] ... <filesystem>
+	create [-ps] [-b blocksize] [-o property=value] ... -V <size> <volume>
+	destroy [-fnpRrv] <filesystem|volume>
+	destroy [-dnpRrv] <filesystem|volume>@<snap>[%<snap>][,...]
+	destroy <filesystem|volume>#<bookmark>
+
+	snapshot [-r] [-o property=value] ... <filesystem|volume>@<snap> ...
+	rollback [-rRf] <snapshot>
+	clone [-p] [-o property=value] ... <snapshot> <filesystem|volume>
+	promote <clone-filesystem>
+	rename [-f] <filesystem|volume|snapshot> <filesystem|volume|snapshot>
+	rename [-f] -p <filesystem|volume> <filesystem|volume>
+	rename -r <snapshot> <snapshot>
+	bookmark <snapshot> <bookmark>
+	program [-jn] [-t <instruction limit>] [-m <memory limit (b)>]
+	    <pool> <program file> [lua args...]
+
+	list [-Hp] [-r|-d max] [-o property[,...]] [-s property]...
+	    [-S property]... [-t type[,...]] [filesystem|volume|snapshot] ...
+
+	set <property=value> ... <filesystem|volume|snapshot> ...
+	get [-rHp] [-d max] [-o "all" | field[,...]]
+	    [-t type[,...]] [-s source[,...]]
+	    <"all" | property[,...]> [filesystem|volume|snapshot|bookmark] ...
+	inherit [-rS] <property> <filesystem|volume|snapshot> ...
+	upgrade [-v]
+	upgrade [-r] [-V version] <-a | filesystem ...>
+
+	userspace [-Hinp] [-o field[,...]] [-s field] ...
+	    [-S field] ... [-t type[,...]] <filesystem|snapshot>
+	groupspace [-Hinp] [-o field[,...]] [-s field] ...
+	    [-S field] ... [-t type[,...]] <filesystem|snapshot>
+	projectspace [-Hp] [-o field[,...]] [-s field] ... 
+	    [-S field] ... <filesystem|snapshot>
+
+	project [-d|-r] <directory|file ...>
+	project -c [-0] [-d|-r] [-p id] <directory|file ...>
+	project -C [-k] [-r] <directory ...>
+	project [-p id] [-r] [-s] <directory ...>
+
+	mount
+	mount [-lvO] [-o opts] <-a | filesystem>
+	unmount [-f] <-a | filesystem|mountpoint>
+	share [-l] <-a [nfs|smb] | filesystem>
+	unshare <-a [nfs|smb] | filesystem|mountpoint>
+
+	send [-DnPpRvLecwhb] [-[i|I] snapshot] <snapshot>
+	send [-nvPLecw] [-i snapshot|bookmark] <filesystem|volume|snapshot>
+	send [-nvPe] -t <receive_resume_token>
+	receive [-vnsFhu] [-o <property>=<value>] ... [-x <property>] ...
+	    <filesystem|volume|snapshot>
+	receive [-vnsFhu] [-o <property>=<value>] ... [-x <property>] ... 
+	    [-d | -e] <filesystem>
+	receive -A <filesystem|volume>
+
+	allow <filesystem|volume>
+	allow [-ldug] <"everyone"|user|group>[,...] <perm|@setname>[,...]
+	    <filesystem|volume>
+	allow [-ld] -e <perm|@setname>[,...] <filesystem|volume>
+	allow -c <perm|@setname>[,...] <filesystem|volume>
+	allow -s @setname <perm|@setname>[,...] <filesystem|volume>
+
+	unallow [-rldug] <"everyone"|user|group>[,...]
+	    [<perm|@setname>[,...]] <filesystem|volume>
+	unallow [-rld] -e [<perm|@setname>[,...]] <filesystem|volume>
+	unallow [-r] -c [<perm|@setname>[,...]] <filesystem|volume>
+	unallow [-r] -s @setname [<perm|@setname>[,...]] <filesystem|volume>
+
+	hold [-r] <tag> <snapshot> ...
+	holds [-rH] <snapshot> ...
+	release [-r] <tag> <snapshot> ...
+	diff [-FHt] <snapshot> [snapshot|filesystem]
+
+	load-key [-rn] [-L <keylocation>] <-a | filesystem|volume>
+	unload-key [-r] <-a | filesystem|volume>
+	change-key [-l] [-o keyformat=<value>]
+	    [-o keylocation=<value>] [-o pbkfd2iters=<value>]
+	    <filesystem|volume>
+	change-key -i [-l] <filesystem|volume>
+
+Each dataset is of the form: pool/[dataset/]*dataset[@name]
+
+For the property list, run: zfs set|get
+
+For the delegated permission list, run: zfs allow|unallow
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zfs -h[K[Klist
+NAME             USED  AVAIL     REFER  MOUNTPOINT
+otus            2.04M   350M       24K  /otus
+otus/hometask2  1.88M   350M     1.88M  /otus/hometask2
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zfs list[K[K[K[Kstatus
+unrecognized command 'status'
+usage: zfs command args ...
+where 'command' is one of the following:
+
+	version
+
+	create [-p] [-o property=value] ... <filesystem>
+	create [-ps] [-b blocksize] [-o property=value] ... -V <size> <volume>
+	destroy [-fnpRrv] <filesystem|volume>
+	destroy [-dnpRrv] <filesystem|volume>@<snap>[%<snap>][,...]
+	destroy <filesystem|volume>#<bookmark>
+
+	snapshot [-r] [-o property=value] ... <filesystem|volume>@<snap> ...
+	rollback [-rRf] <snapshot>
+	clone [-p] [-o property=value] ... <snapshot> <filesystem|volume>
+	promote <clone-filesystem>
+	rename [-f] <filesystem|volume|snapshot> <filesystem|volume|snapshot>
+	rename [-f] -p <filesystem|volume> <filesystem|volume>
+	rename -r <snapshot> <snapshot>
+	bookmark <snapshot> <bookmark>
+	program [-jn] [-t <instruction limit>] [-m <memory limit (b)>]
+	    <pool> <program file> [lua args...]
+
+	list [-Hp] [-r|-d max] [-o property[,...]] [-s property]...
+	    [-S property]... [-t type[,...]] [filesystem|volume|snapshot] ...
+
+	set <property=value> ... <filesystem|volume|snapshot> ...
+	get [-rHp] [-d max] [-o "all" | field[,...]]
+	    [-t type[,...]] [-s source[,...]]
+	    <"all" | property[,...]> [filesystem|volume|snapshot|bookmark] ...
+	inherit [-rS] <property> <filesystem|volume|snapshot> ...
+	upgrade [-v]
+	upgrade [-r] [-V version] <-a | filesystem ...>
+
+	userspace [-Hinp] [-o field[,...]] [-s field] ...
+	    [-S field] ... [-t type[,...]] <filesystem|snapshot>
+	groupspace [-Hinp] [-o field[,...]] [-s field] ...
+	    [-S field] ... [-t type[,...]] <filesystem|snapshot>
+	projectspace [-Hp] [-o field[,...]] [-s field] ... 
+	    [-S field] ... <filesystem|snapshot>
+
+	project [-d|-r] <directory|file ...>
+	project -c [-0] [-d|-r] [-p id] <directory|file ...>
+	project -C [-k] [-r] <directory ...>
+	project [-p id] [-r] [-s] <directory ...>
+
+	mount
+	mount [-lvO] [-o opts] <-a | filesystem>
+	unmount [-f] <-a | filesystem|mountpoint>
+	share [-l] <-a [nfs|smb] | filesystem>
+	unshare <-a [nfs|smb] | filesystem|mountpoint>
+
+	send [-DnPpRvLecwhb] [-[i|I] snapshot] <snapshot>
+	send [-nvPLecw] [-i snapshot|bookmark] <filesystem|volume|snapshot>
+	send [-nvPe] -t <receive_resume_token>
+	receive [-vnsFhu] [-o <property>=<value>] ... [-x <property>] ...
+	    <filesystem|volume|snapshot>
+	receive [-vnsFhu] [-o <property>=<value>] ... [-x <property>] ... 
+	    [-d | -e] <filesystem>
+	receive -A <filesystem|volume>
+
+	allow <filesystem|volume>
+	allow [-ldug] <"everyone"|user|group>[,...] <perm|@setname>[,...]
+	    <filesystem|volume>
+	allow [-ld] -e <perm|@setname>[,...] <filesystem|volume>
+	allow -c <perm|@setname>[,...] <filesystem|volume>
+	allow -s @setname <perm|@setname>[,...] <filesystem|volume>
+
+	unallow [-rldug] <"everyone"|user|group>[,...]
+	    [<perm|@setname>[,...]] <filesystem|volume>
+	unallow [-rld] -e [<perm|@setname>[,...]] <filesystem|volume>
+	unallow [-r] -c [<perm|@setname>[,...]] <filesystem|volume>
+	unallow [-r] -s @setname [<perm|@setname>[,...]] <filesystem|volume>
+
+	hold [-r] <tag> <snapshot> ...
+	holds [-rH] <snapshot> ...
+	release [-r] <tag> <snapshot> ...
+	diff [-FHt] <snapshot> [snapshot|filesystem]
+
+	load-key [-rn] [-L <keylocation>] <-a | filesystem|volume>
+	unload-key [-r] <-a | filesystem|volume>
+	change-key [-l] [-o keyformat=<value>]
+	    [-o keylocation=<value>] [-o pbkfd2iters=<value>]
+	    <filesystem|volume>
+	change-key -i [-l] <filesystem|volume>
+
+Each dataset is of the form: pool/[dataset/]*dataset[@name]
+
+For the property list, run: zfs set|get
+
+For the delegated permission list, run: zfs allow|unallow
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# zfs get all
+NAME            PROPERTY              VALUE                  SOURCE
+otus            type                  filesystem             -
+otus            creation              Fri May 15  4:00 2020  -
+otus            used                  2.04M                  -
+otus            available             350M                   -
+otus            referenced            24K                    -
+otus            compressratio         1.00x                  -
+otus            mounted               yes                    -
+otus            quota                 none                   default
+otus            reservation           none                   default
+otus            recordsize            128K                   local
+otus            mountpoint            /otus                  default
+otus            sharenfs              off                    default
+otus            checksum              sha256                 local
+otus            compression           zle                    local
+otus            atime                 on                     default
+otus            devices               on                     default
+otus            exec                  on                     default
+otus            setuid                on                     default
+otus            readonly              off                    default
+otus            zoned                 off                    default
+otus            snapdir               hidden                 default
+otus            aclinherit            restricted             default
+otus            createtxg             1                      -
+otus            canmount              on                     default
+otus            xattr                 on                     default
+otus            copies                1                      default
+otus            version               5                      -
+otus            utf8only              off                    -
+otus            normalization         none                   -
+otus            casesensitivity       sensitive              -
+otus            vscan                 off                    default
+otus            nbmand                off                    default
+otus            sharesmb              off                    default
+otus            refquota              none                   default
+otus            refreservation        none                   default
+otus            guid                  14592242904030363272   -
+otus            primarycache          all                    default
+otus            secondarycache        all                    default
+otus            usedbysnapshots       0B                     -
+otus            usedbydataset         24K                    -
+otus            usedbychildren        2.01M                  -
+otus            usedbyrefreservation  0B                     -
+otus            logbias               latency                default
+otus            objsetid              54                     -
+otus            dedup                 off                    default
+otus            mlslabel              none                   default
+otus            sync                  standard               default
+otus            dnodesize             legacy                 default
+otus            refcompressratio      1.00x                  -
+otus            written               24K                    -
+otus            logicalused           1020K                  -
+otus            logicalreferenced     12K                    -
+otus            volmode               default                default
+otus            filesystem_limit      none                   default
+otus            snapshot_limit        none                   default
+otus            filesystem_count      none                   default
+otus            snapshot_count        none                   default
+otus            snapdev               hidden                 default
+otus            acltype               off                    default
+otus            context               none                   default
+otus            fscontext             none                   default
+otus            defcontext            none                   default
+otus            rootcontext           none                   default
+otus            relatime              off                    default
+otus            redundant_metadata    all                    default
+otus            overlay               off                    default
+otus            encryption            off                    default
+otus            keylocation           none                   default
+otus            keyformat             none                   default
+otus            pbkdf2iters           0                      default
+otus            special_small_blocks  0                      default
+otus/hometask2  type                  filesystem             -
+otus/hometask2  creation              Fri May 15  4:18 2020  -
+otus/hometask2  used                  1.88M                  -
+otus/hometask2  available             350M                   -
+otus/hometask2  referenced            1.88M                  -
+otus/hometask2  compressratio         1.00x                  -
+otus/hometask2  mounted               yes                    -
+otus/hometask2  quota                 none                   default
+otus/hometask2  reservation           none                   default
+otus/hometask2  recordsize            128K                   inherited from otus
+otus/hometask2  mountpoint            /otus/hometask2        default
+otus/hometask2  sharenfs              off                    default
+otus/hometask2  checksum              sha256                 inherited from otus
+otus/hometask2  compression           zle                    inherited from otus
+otus/hometask2  atime                 on                     default
+otus/hometask2  devices               on                     default
+otus/hometask2  exec                  on                     default
+otus/hometask2  setuid                on                     default
+otus/hometask2  readonly              off                    default
+otus/hometask2  zoned                 off                    default
+otus/hometask2  snapdir               hidden                 default
+otus/hometask2  aclinherit            restricted             default
+otus/hometask2  createtxg             216                    -
+otus/hometask2  canmount              on                     default
+otus/hometask2  xattr                 on                     default
+otus/hometask2  copies                1                      default
+otus/hometask2  version               5                      -
+otus/hometask2  utf8only              off                    -
+otus/hometask2  normalization         none                   -
+otus/hometask2  casesensitivity       sensitive              -
+otus/hometask2  vscan                 off                    default
+otus/hometask2  nbmand                off                    default
+otus/hometask2  sharesmb              off                    default
+otus/hometask2  refquota              none                   default
+otus/hometask2  refreservation        none                   default
+otus/hometask2  guid                  3809416093691379248    -
+otus/hometask2  primarycache          all                    default
+otus/hometask2  secondarycache        all                    default
+otus/hometask2  usedbysnapshots       0B                     -
+otus/hometask2  usedbydataset         1.88M                  -
+otus/hometask2  usedbychildren        0B                     -
+otus/hometask2  usedbyrefreservation  0B                     -
+otus/hometask2  logbias               latency                default
+otus/hometask2  objsetid              81                     -
+otus/hometask2  dedup                 off                    default
+otus/hometask2  mlslabel              none                   default
+otus/hometask2  sync                  standard               default
+otus/hometask2  dnodesize             legacy                 default
+otus/hometask2  refcompressratio      1.00x                  -
+otus/hometask2  written               1.88M                  -
+otus/hometask2  logicalused           963K                   -
+otus/hometask2  logicalreferenced     963K                   -
+otus/hometask2  volmode               default                default
+otus/hometask2  filesystem_limit      none                   default
+otus/hometask2  snapshot_limit        none                   default
+otus/hometask2  filesystem_count      none                   default
+otus/hometask2  snapshot_count        none                   default
+otus/hometask2  snapdev               hidden                 default
+otus/hometask2  acltype               off                    default
+otus/hometask2  context               none                   default
+otus/hometask2  fscontext             none                   default
+otus/hometask2  defcontext            none                   default
+otus/hometask2  rootcontext           none                   default
+otus/hometask2  relatime              off                    default
+otus/hometask2  redundant_metadata    all                    default
+otus/hometask2  overlay               off                    default
+otus/hometask2  encryption            off                    default
+otus/hometask2  keylocation           none                   default
+otus/hometask2  keyformat             none                   default
+otus/hometask2  pbkdf2iters           0                      default
+otus/hometask2  special_small_blocks  0                      default
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# 
+]0;root@zfs:/home/vagrant[root@zfs vagrant]# exit
+
+Script done on 2020-12-06 12:21:27+00:00
